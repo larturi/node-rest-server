@@ -36,11 +36,23 @@ const createUser = async(req = request, res = response) => {
     });
 }
 
-const updateUser = (req = request, res = response) => {
-    const id = req.params.id;
-    res.json({
-        id
+const updateUser = async(req = request, res = response) => {
+    const { id } = req.params;
+    const { password, google, email, ...user } = req.body;
+
+    if (password) {
+        // Encriptar password
+        const salt = bcryptjs.genSaltSync();
+        user.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const userUpdated = await User.findByIdAndUpdate(id, user);
+
+    res.status(200).json({
+        userUpdated
     });
+
+
 }
 
 const patchUser = (req = request, res = response) => {
