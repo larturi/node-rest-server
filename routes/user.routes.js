@@ -8,7 +8,7 @@ const {
     deleteUser,
 } = require('../controllers/user.controller');
 const { validarCampos } = require('../middlewares/validations');
-const { isValidRole } = require('../helpers/db-validators');
+const { isValidRole, emailExists } = require('../helpers/db-validators');
 
 const router = Router();
 
@@ -18,6 +18,7 @@ router.post('/', [
     check('name', 'El nombre es requerido').not().isEmpty(),
     check('password', 'El password debe tener al menos 6 caracteres').isLength({ min: 6 }),
     check('email', 'El email no tiene el formato correcto').isEmail(),
+    check('email').custom(emailExists),
     check('role').custom(isValidRole),
     validarCampos
 ], createUser);
