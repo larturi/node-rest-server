@@ -37,4 +37,10 @@ const UserSchema = new Schema({
     }
 });
 
+// Sobreescribo el metodo para que no muestre el el response el password
+UserSchema.methods.toJSON = function() {
+    const { __v, password, ...user } = this.toObject();
+    return user;
+}
+
 module.exports = model('User', UserSchema);

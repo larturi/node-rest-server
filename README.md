@@ -4,15 +4,12 @@
 
 ### Getting Started
 
-```
+```bash
 npm install
 ```
 
-
-```
+```bash
 npm start
 ```
 
-
-##### Made with ❤️ by Leandro Arturi
-
+#### Made with ❤️ by Leandro Arturi
