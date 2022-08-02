@@ -3,21 +3,21 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user');
 
-const getUsers = (req = request, res = response) => {
-    const {
-        q,
-        name,
-        apikey,
-        page = 1,
-        limit
-    } = req.query;
+const getUsers = async(req = request, res = response) => {
+
+    const { limit = 5, init = 0 } = req.query;
+    const filter = { status: true };
+
+    const [total, users] = await Promise.all([
+        User.countDocuments(filter),
+        User.find(filter)
+        .skip(Number(init))
+        .limit(Number(limit))
+    ]);
 
     res.json({
-        q,
-        name,
-        apikey,
-        page,
-        limit
+        total,
+        users,
     });
 }
 
@@ -38,7 +38,7 @@ const createUser = async(req = request, res = response) => {
 
 const updateUser = async(req = request, res = response) => {
     const { id } = req.params;
-    const { password, google, email, ...user } = req.body;
+    const { _id, password, google, email, ...user } = req.body;
 
     if (password) {
         // Encriptar password
@@ -48,9 +48,7 @@ const updateUser = async(req = request, res = response) => {
 
     const userUpdated = await User.findByIdAndUpdate(id, user);
 
-    res.status(200).json({
-        userUpdated
-    });
+    res.status(200).json(userUpdated);
 
 
 }
