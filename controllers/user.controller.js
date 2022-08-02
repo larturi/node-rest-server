@@ -53,22 +53,15 @@ const updateUser = async(req = request, res = response) => {
 
 }
 
-const patchUser = (req = request, res = response) => {
-    res.json({
-        msg: "PATCH Api"
-    });
-}
-
-const deleteUser = (req = request, res = response) => {
-    res.json({
-        msg: "DELETE Api"
-    });
+const deleteUser = async(req = request, res = response) => {
+    const { id } = req.params;
+    const user = await User.findByIdAndUpdate(id, { status: false });
+    res.json(user);
 }
 
 module.exports = {
     getUsers,
     createUser,
     updateUser,
-    patchUser,
     deleteUser,
 }

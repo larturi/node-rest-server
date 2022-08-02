@@ -4,7 +4,6 @@ const {
     getUsers,
     createUser,
     updateUser,
-    patchUser,
     deleteUser,
 } = require('../controllers/user.controller');
 const { validarCampos } = require('../middlewares/validations');
@@ -30,8 +29,10 @@ router.put('/:id', [
     validarCampos
 ], updateUser);
 
-router.patch('/', patchUser);
-
-router.delete('/', deleteUser);
+router.delete('/:id', [
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(userExistsById),
+    validarCampos
+], deleteUser);
 
 module.exports = router;
