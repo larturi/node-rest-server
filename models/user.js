@@ -39,7 +39,8 @@ const UserSchema = new Schema({
 
 // Sobreescribo el metodo para que no muestre el el response el password
 UserSchema.methods.toJSON = function() {
-    const { __v, password, ...user } = this.toObject();
+    const { __v, _id, password, ...user } = this.toObject();
+    user.uid = _id;
     return user;
 }
 
