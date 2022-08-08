@@ -4,7 +4,6 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
 const getUsers = async(req = request, res = response) => {
-
     const { limit = 5, init = 0 } = req.query;
     const filter = { status: true };
 
