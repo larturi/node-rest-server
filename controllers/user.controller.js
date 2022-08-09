@@ -48,8 +48,6 @@ const updateUser = async(req = request, res = response) => {
     const userUpdated = await User.findByIdAndUpdate(id, user);
 
     res.status(200).json(userUpdated);
-
-
 }
 
 const deleteUser = async(req = request, res = response) => {

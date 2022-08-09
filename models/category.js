@@ -16,6 +16,12 @@ const CategorySchema = new Schema({
         ref: 'User',
         required: [true, 'El campo user es obligatorio']
     }
-})
+});
+
+// Sobreescribo el metodo para que no muestre el el response el password
+CategorySchema.methods.toJSON = function() {
+    const { __v, ...data } = this.toObject();
+    return data;
+}
 
 module.exports = model('Category', CategorySchema);

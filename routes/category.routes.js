@@ -7,9 +7,8 @@ const {
     updateCategory, 
     deleteCategory 
 } = require( '../controllers/category.controller' );
-
+const { existeCategoriaById } = require( '../helpers/db-validators' );
 const { validarJWT, validarCampos } = require('../middlewares');
-
 const router = Router();
 
 /**
@@ -18,7 +17,11 @@ const router = Router();
 
 router.get('/', getCategories);
 
-router.get('/:id', getCategoryById);
+router.get('/:id', [
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeCategoriaById),
+    validarCampos,
+], getCategoryById);
 
 router.post('/', [
     validarJWT,
@@ -26,7 +29,13 @@ router.post('/', [
     validarCampos
 ], createCategory);
 
-router.put('/:id', updateCategory);
+router.put('/:id', [
+    validarJWT,
+    check('name', 'El campo name es obligatorio').notEmpty(),
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeCategoriaById),
+    validarCampos
+], updateCategory);
 
 router.delete('/:id', deleteCategory);
 

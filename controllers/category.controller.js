@@ -2,14 +2,32 @@ const { request, response } = require('express');
 const Category = require('../models/category');
 
 const getCategories = async(req = request, res = response) => {
+
+    const { limit = 5, init = 0 } = req.query;
+    const filter = { status: true };
+
+    const [total, categories] = await Promise.all([
+        Category.countDocuments(filter),
+        Category.find(filter)
+            .populate('user', 'name')
+            .skip(Number(init))
+            .limit(Number(limit))
+    ]);
+
     res.json({
-        msg: "get"
+        total,
+        categories,
     });
 }
 
 const getCategoryById = async(req = request, res = response) => {
+
+    const { id } = req.params;
+
+    const category = await Category.findById(id).populate('user', 'name');
+
     res.json({
-        msg: "getById"
+        category
     });
 }
 
@@ -40,10 +58,17 @@ const createCategory = async(req = request, res = response) => {
 }
 
 const updateCategory = async(req = request, res = response) => {
-    // Privado, cualquier rol
-    res.json({
-        msg: "updateCategory"
-    });
+    const { id } = req.params;
+    const { _id, isActive, user, ...data } = req.body;
+
+    console.log(data)
+
+    data.name = data.name.toUpperCase();
+    data.user = req.usuarioAutenticado._id
+
+    const categoryUpdated = await Category.findByIdAndUpdate(id, data,{ new: true });
+
+    res.status(200).json(categoryUpdated);
 }
 
 const deleteCategory = async(req = request, res = response) => {
