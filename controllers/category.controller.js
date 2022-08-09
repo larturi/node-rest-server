@@ -66,16 +66,17 @@ const updateCategory = async(req = request, res = response) => {
     data.name = data.name.toUpperCase();
     data.user = req.usuarioAutenticado._id
 
-    const categoryUpdated = await Category.findByIdAndUpdate(id, data,{ new: true });
+    const categoryUpdated = await Category.findByIdAndUpdate(id, data, { new: true });
 
     res.status(200).json(categoryUpdated);
 }
 
 const deleteCategory = async(req = request, res = response) => {
-    // Privado, solo el admin
-    res.json({
-        msg: "deleteCategory"
-    });
+    const { id } = req.params;
+
+    const category = await Category.findByIdAndUpdate(id, { isActive: false }, { new: true });
+
+    res.json(category);
 }
 
 module.exports = {

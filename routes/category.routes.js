@@ -8,7 +8,7 @@ const {
     deleteCategory 
 } = require( '../controllers/category.controller' );
 const { existeCategoriaById } = require( '../helpers/db-validators' );
-const { validarJWT, validarCampos } = require('../middlewares');
+const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
 const router = Router();
 
 /**
@@ -37,7 +37,13 @@ router.put('/:id', [
     validarCampos
 ], updateCategory);
 
-router.delete('/:id', deleteCategory);
+router.delete('/:id', [
+    validarJWT,
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom(existeCategoriaById),
+    esAdminRole,
+    validarCampos
+], deleteCategory);
 
 
 module.exports = router;
