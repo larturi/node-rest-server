@@ -7,6 +7,9 @@ const {
     updateCategory, 
     deleteCategory 
 } = require( '../controllers/category.controller' );
+
+const { validarJWT, validarCampos } = require('../middlewares');
+
 const router = Router();
 
 /**
@@ -14,9 +17,17 @@ const router = Router();
  */
 
 router.get('/', getCategories);
+
 router.get('/:id', getCategoryById);
-router.post('/', createCategory);
+
+router.post('/', [
+    validarJWT,
+    check('name', 'El campo name es obligatorio').notEmpty(),
+    validarCampos
+], createCategory);
+
 router.put('/:id', updateCategory);
+
 router.delete('/:id', deleteCategory);
 
 

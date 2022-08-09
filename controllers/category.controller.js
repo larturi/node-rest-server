@@ -2,16 +2,6 @@ const { request, response } = require('express');
 const Category = require('../models/category');
 
 const getCategories = async(req = request, res = response) => {
-    // const { limit = 5, init = 0 } = req.query;
-    // const filter = { status: true };
-
-    // const [total, users] = await Promise.all([
-    //     User.countDocuments(filter),
-    //     User.find(filter)
-    //     .skip(Number(init))
-    //     .limit(Number(limit))
-    // ]);
-
     res.json({
         msg: "get"
     });
@@ -24,9 +14,28 @@ const getCategoryById = async(req = request, res = response) => {
 }
 
 const createCategory = async(req = request, res = response) => {
-    // Privado, cualquier rol
-    res.json({
-        msg: "createCategory"
+    // Cualquier persona autenticada puede crear categorias
+
+    const name = req.body.name.toUpperCase();
+
+    // Validar que la categoria no exista
+    const categoryDB = await Category.findOne({ name });
+    if (categoryDB) {
+        return res.status(400).json({
+            msg: `La categoria ${categoryDB.name} ya existe`
+        });
+    }
+
+    const data = {
+        name, 
+        user: req.usuarioAutenticado._id
+    }
+
+    const category = await new Category(data);
+    await category.save();
+
+    res.status(201).json({
+        category
     });
 }
 
