@@ -4,7 +4,7 @@ const Category = require('../models/category');
 const getCategories = async(req = request, res = response) => {
 
     const { limit = 5, init = 0 } = req.query;
-    const filter = { status: true };
+    const filter = { isActive: true };
 
     const [total, categories] = await Promise.all([
         Category.countDocuments(filter),
@@ -60,8 +60,6 @@ const createCategory = async(req = request, res = response) => {
 const updateCategory = async(req = request, res = response) => {
     const { id } = req.params;
     const { _id, isActive, user, ...data } = req.body;
-
-    console.log(data)
 
     data.name = data.name.toUpperCase();
     data.user = req.usuarioAutenticado._id
