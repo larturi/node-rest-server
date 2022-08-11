@@ -7,6 +7,7 @@ const validCollections = [
     'roles',
     'products',
     'categories',
+    'products_categories',
 ];
 
 const buscarUsuarios = async (term = '', res = response) => {
@@ -55,6 +56,24 @@ const buscarProductos = async (term = '', res = response) => {
     .populate('user', 'email');
 
     return res.json({
+        results: productos
+    });
+}
+
+const buscarProductosPorCategoria = async (term = '', res = response) => {
+    const isMongoID = ObjectId.isValid(term);
+
+    // Debe ser un MongoID
+    if(!isMongoID) {
+          return res.status(400).json({
+            msg: 'Debe ingresar el id de la categoria'
+        });
+    }
+    const productos = await Product.find({ category: term })
+        .populate('category', 'name')
+        .populate('user', 'email');
+    
+      return res.json({
         results: productos
     });
 }
@@ -129,6 +148,10 @@ const search = (req, res = response) => {
 
         case 'categories':
             buscarCategorias(term, res)
+            break;
+
+        case 'products_categories':
+            buscarProductosPorCategoria(term, res)
             break;
     
         default:
