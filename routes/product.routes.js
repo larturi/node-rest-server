@@ -9,6 +9,7 @@ const {
 } = require( '../controllers/product.controller' );
 const { existeCategoriaById, existeProductoById } = require( '../helpers/db-validators' );
 const { validarJWT, validarCampos, hasRole } = require('../middlewares');
+
 const router = Router();
 
 /**

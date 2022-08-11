@@ -13,6 +13,7 @@ class Server {
             auth: '/api/auth',
             categories: '/api/categories',
             products: '/api/products',
+            search: '/api/search',
             users: '/api/users',
         }
 
@@ -35,6 +36,7 @@ class Server {
         this.app.use(this.paths.categories, require('../routes/category.routes'));
         this.app.use(this.paths.products, require('../routes/product.routes'));
         this.app.use(this.paths.users, require('../routes/user.routes'));
+        this.app.use(this.paths.search, require('../routes/search.routes'));
     }
 
     middlewares() {
