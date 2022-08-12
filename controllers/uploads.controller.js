@@ -8,16 +8,36 @@ const uploadFile = (req, res = response) => {
     }
     
     const { file } = req.files;
+
+    // Obtener la extension del file
+    const fileNameSplit = file.name.split('.');
+    const extension = fileNameSplit[fileNameSplit.length - 1];
+    
+    // Validar la extension del file
+    const validExtensions = [
+        'gif', 
+        'ico', 
+        'jpeg', 
+        'jpg', 
+        'pdf',
+        'png', 
+        'xls', 
+        'xlsx', 
+    ];
+
+    if (!validExtensions.includes(extension)) {
+        return res.status(400).json({ msg: `La extension ${extension} no esta permitida. Las permitidas son: ${validExtensions}` });
+    }
   
-    const uploadPath = path.join(__dirname, '../uploads/', file.name);
+    // const uploadPath = path.join(__dirname, '../uploads/', file.name);
   
-    file.mv(uploadPath, function(err) {
-      if (err) {
-        return res.status(500).json({ msg: err.message });
-      }
+    // file.mv(uploadPath, function(err) {
+    //   if (err) {
+    //     return res.status(500).json({ msg: err.message });
+    //   }
   
-      res.json({ msg: 'File uploaded to ' + uploadPath });
-    });
+    //   res.json({ msg: 'File uploaded to ' + uploadPath });
+    // });
 
 }
 
