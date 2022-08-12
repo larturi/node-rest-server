@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const { response } = require('express');
 const { uploadFile } = require('../helpers');
 const { Product, User } = require('../models')
@@ -12,7 +14,6 @@ const subirArchivo = async (req, res = response) => {
 }
 
 const actualizarImagen = async (req, res = response) => {
-
     const { collection, id } = req.params;
 
     let modelo;
@@ -34,6 +35,14 @@ const actualizarImagen = async (req, res = response) => {
     
         default:
             return res.status(500).json({ msg: 'Colleccion no soportada' })
+    }
+
+    // Elimina la imagen vieja
+    if(modelo.img) {
+        const pathImagenOld = path.join(__dirname, '../uploads', collection, modelo.img);
+        if(fs.existsSync(pathImagenOld)) {
+            fs.unlinkSync(pathImagenOld);
+        }
     }
 
     // Guarda la imagen
