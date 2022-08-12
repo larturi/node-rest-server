@@ -86,7 +86,9 @@ const showImage = async (req, res = response) => {
         }
     }
 
-    res.json({ msg: 'Falta placeholder' });
+    // Si no existe la imagen mando un placeholder
+    const pathImagenPlaceholder = path.join(__dirname, '../assets/no-image.jpg');
+    return res.sendFile(pathImagenPlaceholder);
 }
 
 module.exports = {
