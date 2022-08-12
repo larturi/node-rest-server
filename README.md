@@ -1,6 +1,6 @@
-# API Rest Node
+# Node API Rest Server
 
-## API Rest Node, Mongo, POO, FileSystem, JWT, Auth
+## Node, Mongo, POO, FileSystem, JWT, Auth
 
 ### Getting Started
 
